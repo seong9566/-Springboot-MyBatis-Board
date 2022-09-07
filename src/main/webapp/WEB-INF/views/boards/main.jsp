@@ -23,6 +23,30 @@
 		</tbody>
 	</table>
 
+	<ul class="pagination">
+
+		<li class='page-item ${paging.first ? "disabled" : " "}'><a class="page-link"
+			href="?page=${paging.currentPage-1}">Prev</a></li>
+
+		<c:forEach var="num" begin="1" end="${paging.totalPage}" step="1">
+			<li class="page-item"><a class="page-link" href="?page=${num-1}">${num}</a></li>
+		</c:forEach>
+
+		<li class='page-item ${paging.last ? "disabled" : " "}'><a class="page-link"
+			href="?page=${paging.currentPage+1}">Next</a></li>
+
+	</ul>
+
+	<div>
+		<h3>totalCount : ${paging.totalCount}</h3>
+		<h3>totalPage : ${paging.totalPage}</h3>
+		<h3>currentPage : ${paging.currentPage}</h3>
+		<h3>isLast : ${paging.last}</h3>
+		<h3>isFirst : ${paging.first}</h3>
+	</div>
+
+
+
 </div>
 
 <%@ include file="../layout/footer.jsp"%>

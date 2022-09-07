@@ -15,6 +15,7 @@ import site.metacoding.red.domain.boards.BoardsDao;
 import site.metacoding.red.domain.users.Users;
 import site.metacoding.red.web.dto.request.boards.WriteDto;
 import site.metacoding.red.web.dto.response.boards.MainDto;
+import site.metacoding.red.web.dto.response.boards.PagingDto;
 
 @RequiredArgsConstructor
 @Controller
@@ -46,11 +47,17 @@ public class BoardsController {
 	//http://localhost:8000/ -> 쿼리스트링이 비어있으므로 null  , 디폴트 값을 만들어주어야한다.
 	// http://localhost:8000/?page=0 
 	@GetMapping({"/", "/boards"})
-	public String getBoardList(Model model,Integer page) {// pk가 아니면 모두 쿼리 스트링으로 받는다.(page), 0-> 0 , 1-> 10, 2 -> 20
+	public String getBoardList(Model model, Integer page) {// pk가 아니면 모두 쿼리 스트링으로 받는다.(page), 0-> 0 , 1-> 10, 2 -> 20
 		if(page == null) page =0;
 		int startNum = page * 10;
+		
+		PagingDto paging = boardsDao.paging(page);
 		List<MainDto> boardsList = boardsDao.findAll(startNum);
+		
+		//paging.set 머시기로 dto 완성 
+		
 		model.addAttribute("boardsList", boardsList);
+		model.addAttribute("paging", paging);
 		return "boards/main";
 	}
 	
