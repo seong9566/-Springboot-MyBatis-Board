@@ -13,7 +13,7 @@
 		decode(currentPage, totalPage-1, 1, 0) last
 		FROM
 		(
-		select count(*) totalCount, ceil(count(*)/10) totalPage, #{page}
+		select count(*) totalCount, ceil(count(*)/3) totalPage, #{page}
 		currentPage, 0
 		first, 0 last
 		FROM boards
