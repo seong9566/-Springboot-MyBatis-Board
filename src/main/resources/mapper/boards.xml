@@ -24,12 +24,25 @@
 		INSERT INTO boards(id, title, content, usersId,
 		createdAt)
 		VALUES(boards_seq.nextval, #{title}, #{content}, #{usersId},
-		sysdate)est29
+		sysdate)
 	</insert>
 
 	<select id="findById"
 		resultType="site.metacoding.red.domain.boards.Boards">
 		SELECT id, title, content,usersId FROM boards WHERE id=#{id}
+	</select>
+
+	<select id="findSearch"
+		resultType="site.metacoding.red.web.dto.response.boards.MainDto">
+		SELECT b.id, b.title, u.username
+		FROM boards b
+		INNER JOIN
+		users u
+		ON b.usersId = u.id
+		WHERE title LIKE '%'||#{keyword}||'%'
+		ORDER BY b.id DESC
+		OFFSET #{startNum} ROWS
+		FETCH NEXT 3 ROWS ONLY
 	</select>
 
 	<select id="findAll"

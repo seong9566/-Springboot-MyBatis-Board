@@ -4,11 +4,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.red.domain.boards.Boards;
@@ -135,22 +137,39 @@ public class BoardsController {
 	}
 	
 	
-	//http://localhost:8000/ -> 쿼리스트링이 비어있으므로 null  , 디폴트 값을 만들어주어야한다.
-	// http://localhost:8000/?page=0 
+	//1번째 ?page=0&keyword=스프링
 	@GetMapping({ "/", "/boards" })
-	public String getBoardList(Model model, Integer page) { // 0 -> 0, 1->10, 2->20
-		if (page == null)
+	public String getBoardList(Model model,Integer page,String keyword) { // 0 -> 0, 1->10, 2->20
+		if (page == null) {
 			page = 0;
-		int startNum = page * 3;
-
-		List<MainDto> boardsList = boardsDao.findAll(startNum);
-		PagingDto paging = boardsDao.paging(page);
-		paging.makeBlockInfo();
+		}
+		int startNum = page * 3;  
 		
-		model.addAttribute("boardsList", boardsList);
-		model.addAttribute("paging", paging);
-		
+		if(keyword == null || keyword.isEmpty()) { // 키워드가 null 이면 기존 페이지 
+			List<MainDto> boardsList = boardsDao.findAll(startNum);
+			PagingDto paging = boardsDao.paging(page,null);
+			paging.makeBlockInfo(keyword);
+			
+			model.addAttribute("boardsList", boardsList);
+			model.addAttribute("paging", paging);
+		}
+		else {
+			List<MainDto> boardsList = boardsDao.findSearch(startNum,keyword);
+			PagingDto paging = boardsDao.paging(page,keyword);
+			paging.makeBlockInfo(keyword);
+			model.addAttribute("boardsList", boardsList);
+			model.addAttribute("paging", paging);
+		}
 		return "boards/main";
+
+//		List<MainDto> boardsList = boardsDao.findAll(startNum);
+//		PagingDto paging = boardsDao.paging(page);
+//		paging.makeBlockInfo();
+//		
+//		model.addAttribute("boardsList", boardsList);
+//		model.addAttribute("paging", paging);
+//		
+//		return "boards/main";
 	}
 	
 	@GetMapping("/boards/{id}")
