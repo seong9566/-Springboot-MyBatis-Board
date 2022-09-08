@@ -24,12 +24,12 @@
 		INSERT INTO boards(id, title, content, usersId,
 		createdAt)
 		VALUES(boards_seq.nextval, #{title}, #{content}, #{usersId},
-		sysdate)
+		sysdate)est29
 	</insert>
 
 	<select id="findById"
 		resultType="site.metacoding.red.domain.boards.Boards">
-		SELECT id, title, content FROM boards WHERE id=#{id}
+		SELECT id, title, content,usersId FROM boards WHERE id=#{id}
 	</select>
 
 	<select id="findAll"
@@ -45,7 +45,7 @@
 	</select>
 
 	<update id="update">
-
+   UPDATE boards SET title= #{title}, content = #{content} WHERE id = #{id}
 	</update>
 
 	<delete id="delete">

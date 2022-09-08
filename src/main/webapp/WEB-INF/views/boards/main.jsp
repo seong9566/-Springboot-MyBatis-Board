@@ -22,7 +22,7 @@
 
 		</tbody>
 	</table>
-	<div class = "d-flex justify-content-center">
+	<div class="d-flex justify-content-center">
 		<ul class="pagination">
 			<li class='page-item ${paging.first ? "disabled" : ""}'><a class="page-link"
 				href="?page=${paging.currentPage-1}">Prev</a></li>
